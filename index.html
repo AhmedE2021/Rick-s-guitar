@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rick's guitar inventory</title>
+    <link rel="stylesheet" href="styles/mystyle.css">
+</head>
+
+<body>
+
+
+
+    
+<h1>Rick's guitar inventory</h1>
+<div class="header">
+    <div>
+    <button type="button" class="button" id="addGuitarButton" >Add Guitar</button>
+    <button type="button" class="button" data-value="Show all guitars" id="showAllGuitarsButton">Show all guitars</button>
+</div>
+    <form id="snSearchform">
+<input type="search" id="snField"
+class="inputField"
+placeholder="Search serial number"
+required>
+<button type="submit"
+class="button">Search</button>
+    </form>
+</div>
+
+<!-- panel starts here  -->
+<aside class="searchPanel" id="searchPanel">
+    <span class="panelText" id="panelText">A D V A N C E D&nbsp;&nbsp;
+        S E A R C H </span>
+    <form id="searchForm" class="searchForm">
+       <div class="closeCross" id="closeCross">X</div> 
+       
+       <label class="searchFormLabel" for="builder">Builder</label><input type="text"
+        id="builder" class="searchFormField">
+
+        <label class="searchFormLabel" for="model">Model</label><input type="text"
+        id="model" class="searchFormField">
+
+        <label class="searchFormLabel" for="type">Type</label><input type="text"
+        id="type" class="searchFormField">
+
+        <label class="searchFormLabel" for="backwood">Backwood</label><input type="text"
+        id="backwood" class="searchFormField">
+
+        <label class="searchFormLabel" for="topwood">Topwood</label><input type="text"
+        id="topwood" class="searchFormField">
+
+        <label class="searchFormLabel" for="price">Price</label><input type="number"
+        step="0.50" id="price" class="searchFormField">
+        
+        <br><br>
+
+        <div class="searchFormPanel">
+            <button type="reset" class="searchFormButton">Reset</button>
+            <button type="submit" class="searchFormButton">Apply</button>
+
+        </div>
+    </form>
+</aside>
+
+<!-- panel ends here -->
+
+
+
+
+
+<!-- Add guitar dialog start -->
+<dialog id="guitarDialog">
+    <form method="dialog" id="guitarDialogForm">
+        <fieldset>
+            <legend>Add new guitar </legend>
+            <label for="snfield">S/N;</label><input type="text" class="inputField dialogField" 
+            id="snfield" placeholder="Type in serial number" required>
+
+            <label for="builderfield">Builder;</label><input type="text" class="inputField dialogField" 
+            id="builderfield" placeholder="Type in buidler name" required>
+
+            <label for="modelfield">Model;</label><input type="text" class="inputField dialogField" 
+            id="modelfield" placeholder="Type in model name" required>
+
+            <label for="typefield">Type;</label><input type="text" class="inputField dialogField" 
+            id="typefield" placeholder="Type in type name" required>
+
+            <label for="backwoodfield">Backwood;</label><input type="text" class="inputField dialogField" 
+            id="backwoodfield" placeholder="Type in backwood name" required>
+
+            <label for="topwoodfield">Topkwood;</label><input type="text" class="inputField dialogField" 
+            id="topwoodfield" placeholder="Type in topwood name" required>
+
+            <label for="pricefield">Price;</label><input type="text" class="inputField dialogField" 
+            id="pricefield" placeholder="Type in guitar price" required>
+
+            <br><br>
+            <div class="dialogBtnsPanel">
+                <button type="button" id="cancelButton" class="button">Cancel</button>
+                <button type="submit" id="saveButtom" class="button" >Save</button>
+            </div>
+        </fieldset>
+    </form>
+</dialog>
+
+<!-- Add guitar dialog end  -->
+
+
+
+
+
+<!-- Delete confirmation dialog start -->
+<dialog id="confirmDialog">
+    <form method="dialog" id="confirmDialogForm">
+        <fieldset>
+            <legend>Delete guitar?</legend>
+            Do you really want to delete this guitar?
+            <br><br>
+            <div class="dialogBtnsPanel">
+                <button type="submit" class="button">Yes</button>
+                <button type="button" class="button" id="cancelConfirmBtn">No</button>
+            </div>
+        </fieldset>
+    </form>
+</dialog>
+
+<!-- Delete confirmation dialog end  -->
+
+
+<!-- Hidden form field  -->
+<form>
+    <input type="hidden" id="hiddenSnField">
+</form>
+
+
+
+
+<table class="tablelist">
+    <thead>
+        <tr>
+            <th>Serial Number</th>
+            <th>Builder</th>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Backwood</th>
+            <th>Topwood</th>
+            <th>Price $</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+   <tbody id="searchResult"></tbody>
+</table>
+
+<div id="snackbar"></div>
+
+<script type="module">
+    import Model from "./models/model.js"
+    import Controller from "./controllers/controller.js"
+    import View from "./views/view.js"
+
+
+    window.onload = function () {
+        const model = new Model();
+        const controller = new Controller();
+        const view = new View(controller);
+        controller.initialize(model, view);
+
+fetch("https://mortenbonderup.github.io/guitars/guitars.json")
+
+.then (function(data){
+    return data.json();
+})
+.then(function(post){
+    model.initialize(post.guitars);
+})
+.catch(function(error){
+    console.log("Service is not available: "+ error);
+    })
+
+    }
+</script>
+</body>
+
+</html>
